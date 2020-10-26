@@ -3,10 +3,14 @@ import PropTypes from "prop-types"
 
 import contactContext from "../../context/contact/contactContext"
 
-const ContactItem = ({ contact: { name, id, email, phone, type } }) => {
+const ContactItem = ({ contact }) => {
+  const { name, id, email, phone, type } = contact
+
   const ContactContext = React.useContext(contactContext)
+
   const onDelete = () => {
     ContactContext.deleteContact(id)
+    contact.id === ContactContext.current.id && ContactContext.clearCurrent()
   }
 
   return (
@@ -37,7 +41,12 @@ const ContactItem = ({ contact: { name, id, email, phone, type } }) => {
           </li>
         )}
       </ul>
-      <button className="btn btn-dark btn-sm">Edit</button>
+      <button
+        className="btn btn-dark btn-sm"
+        onClick={() => ContactContext.setCurrent(contact)}
+      >
+        Edit
+      </button>
       <button className="btn btn-danger btn-sm" onClick={onDelete}>
         Delete
       </button>

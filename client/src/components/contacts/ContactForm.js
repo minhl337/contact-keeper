@@ -1,3 +1,4 @@
+// TODO: Add checks to make sure fields arent blank/ may already be in backend logic
 import React from "react"
 import contactContext from "../../context/contact/contactContext"
 
@@ -10,6 +11,18 @@ const ContactForm = () => {
     phone: "",
     type: "personal",
   })
+  const { name, email, phone, type } = contact
+
+  React.useEffect(() => {
+    ContactContext.current
+      ? setContact(ContactContext.current)
+      : setContact({
+          name: "",
+          email: "",
+          phone: "",
+          type: "personal",
+        })
+  }, [ContactContext.current])
 
   const onChange = (e) => {
     setContact({
@@ -21,7 +34,15 @@ const ContactForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    ContactContext.addContact(contact)
+    ContactContext.current
+      ? ContactContext.updateContact(contact)
+      : ContactContext.addContact(contact)
+
+    clearAll()
+  }
+
+  const clearAll = () => {
+    ContactContext.clearCurrent()
     setContact({
       name: "",
       email: "",
@@ -29,10 +50,10 @@ const ContactForm = () => {
       type: "personal",
     })
   }
-  const { name, email, phone, type } = contact
+
   return (
     <form onSubmit={onSubmit}>
-      <h2>Add Contact</h2>
+      <h2>{ContactContext.current ? "Edit" : "Add"} Contact</h2>
       <input
         type="text"
         name="name"
@@ -77,13 +98,25 @@ const ContactForm = () => {
           Professional
         </div>
       </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <div>
+          <button type="submit" className="btn btn-primary btn-block">
+            {ContactContext.current ? "Update " : "Add "} Contact
+          </button>
+        </div>
 
-      <div>
-        <input
-          type="submit"
-          value="Add Contact"
-          className="btn btn-primary btn-block"
-        />
+        <div>
+          {ContactContext.current && (
+            <button className="btn btn-light btn-block" onClick={clearAll}>
+              Clear
+            </button>
+          )}
+        </div>
       </div>
     </form>
   )
