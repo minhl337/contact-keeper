@@ -8,6 +8,12 @@ import {
   CLEAR_FILTER,
 } from "../types"
 
+import Fuse from "fuse.js"
+
+const options = {
+  keys: ["name", "email"],
+}
+
 export default (state, action) => {
   switch (action.type) {
     case ADD_CONTACT:
@@ -38,6 +44,17 @@ export default (state, action) => {
         contacts: state.contacts.map((contact) => {
           return contact.id === action.payload.id ? action.payload : contact
         }),
+      }
+    case FILTER_CONTACTS:
+      const fuse = new Fuse(state.contacts, options)
+      return {
+        ...state,
+        filtered: fuse.search(action.payload),
+      }
+    case CLEAR_FILTER:
+      return {
+        ...state,
+        filtered: null,
       }
     default:
       return state

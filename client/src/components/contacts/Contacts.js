@@ -2,18 +2,27 @@ import React, { useContext } from "react"
 
 import ContactItem from "./ContactItem"
 
-import ContactContext from "../../context/contact/contactContext"
+import contactContext from "../../context/contact/contactContext"
+import ContactFilter from "./ContactFilter"
 
 const Contacts = () => {
-  const contactContext = useContext(ContactContext)
+  const ContactContext = useContext(contactContext)
 
-  const { contacts } = contactContext
+  const { contacts } = ContactContext
+
+  if (contacts.length === 0) {
+    return <h4>Please Add a Contact</h4>
+  }
 
   return (
     <>
-      {contacts.map((contact) => (
-        <ContactItem contact={contact} key={contact.id} />
-      ))}
+      {ContactContext.filtered.length > 0
+        ? ContactContext.filtered.map((contact) => (
+            <ContactItem contact={contact.item} key={contact.item.id} />
+          ))
+        : contacts.map((contact) => (
+            <ContactItem contact={contact} key={contact.id} />
+          ))}
     </>
   )
 }
