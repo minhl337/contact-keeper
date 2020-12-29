@@ -22,14 +22,13 @@ const ContactForm = () => {
           phone: "",
           type: "personal",
         })
-  }, [ContactContext.current])
+  }, [ContactContext])
 
   const onChange = (e) => {
     setContact({
       ...contact,
       [e.target.name]: e.target.value,
     })
-    console.log(contact)
   }
 
   const onSubmit = (e) => {

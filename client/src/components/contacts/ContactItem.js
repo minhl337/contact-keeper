@@ -10,7 +10,9 @@ const ContactItem = ({ contact }) => {
 
   const onDelete = () => {
     ContactContext.deleteContact(id)
-    contact.id === ContactContext.current.id && ContactContext.clearCurrent()
+    ContactContext.current &&
+      contact.id === ContactContext.current.id &&
+      ContactContext.clearCurrent()
   }
 
   return (
