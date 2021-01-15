@@ -1,5 +1,7 @@
 import React from "react"
 import alertContext from "../../context/alert/alertContext"
+import authContext from "../../context/auth/authContext"
+import AuthState from "../../context/auth/AuthState"
 
 const Register = () => {
   const [user, setUser] = React.useState({
@@ -10,6 +12,15 @@ const Register = () => {
   })
 
   const AlertContext = React.useContext(alertContext)
+  const AuthContext = React.useContext(authContext)
+
+  React.useEffect(() => {
+    if (AuthContext.error === "User already exists") {
+      AlertContext.setAlert("User already exists", "danger")
+      AuthContext.clearErrors()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [AuthContext.error])
 
   const { name, email, password, password2 } = user
 
@@ -26,8 +37,13 @@ const Register = () => {
       AlertContext.setAlert("All fields required", "danger")
     } else if (password !== password2) {
       AlertContext.setAlert("Passwords do not match", "danger")
+    } else {
+      AuthContext.register({
+        name,
+        email,
+        password,
+      })
     }
-    console.log(user)
   }
   return (
     <div className="form-container">
