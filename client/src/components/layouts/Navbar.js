@@ -2,7 +2,10 @@ import React from "react"
 import PropTypes from "prop-types"
 import { Link } from "react-router-dom"
 
-const Navbar = ({ title, icon }) => {
+import authContext from "../../context/auth/authContext"
+
+const Navbar = ({ title, icon, history }) => {
+  const AuthContext = React.useContext(authContext)
   return (
     <div className="navbar bg-primary">
       <h1>
@@ -15,12 +18,16 @@ const Navbar = ({ title, icon }) => {
         <li>
           <Link to="/about">About</Link>
         </li>
-        <li>
-          <Link to="/register">Register</Link>
-        </li>
-        <li>
-          <Link to="/login">Log In</Link>
-        </li>
+        {!AuthContext.isAuthenticated && (
+          <>
+            <li>
+              <Link to="/register">Register</Link>
+            </li>
+            <li>
+              <Link to="/login">Log In</Link>
+            </li>
+          </>
+        )}
       </ul>
     </div>
   )

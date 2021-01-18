@@ -1,4 +1,5 @@
 import React from "react"
+import { version } from "../../../package.json"
 
 const About = () => {
   return (
@@ -6,7 +7,8 @@ const About = () => {
       <h1>About This App</h1>
       <p className="my-1">This is a full stack react for keeping contacts.</p>
       <p className="bg-dark p">
-        <strong>Version: </strong>1.0.1
+        <strong>Version: </strong>
+        {version}
       </p>
     </div>
   )

@@ -1,9 +1,8 @@
 import React from "react"
 import alertContext from "../../context/alert/alertContext"
 import authContext from "../../context/auth/authContext"
-import AuthState from "../../context/auth/AuthState"
 
-const Register = () => {
+const Register = (props) => {
   const [user, setUser] = React.useState({
     name: "",
     email: "",
@@ -13,14 +12,17 @@ const Register = () => {
 
   const AlertContext = React.useContext(alertContext)
   const AuthContext = React.useContext(authContext)
-
+  console.log(AuthContext)
   React.useEffect(() => {
-    if (AuthContext.error === "User already exists") {
-      AlertContext.setAlert("User already exists", "danger")
+    if (AuthContext.isAuthenticated) {
+      props.history.push("/")
+    }
+    if (AuthContext.error) {
+      AlertContext.setAlert(AuthContext.error, "danger")
       AuthContext.clearErrors()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [AuthContext.error])
+  }, [AuthContext.error, AuthContext.isAuthenticated])
 
   const { name, email, password, password2 } = user
 
